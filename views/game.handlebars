@@ -1,28 +1,33 @@
- <style> 
+<style>
     #canvas_div {
-    text-align: center;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+        text-align: center;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
+
     canvas {
         border: 2px solid black;
     }
-    </style>
+    
+    
 
- <div id="canvas_div" style="overflow-x: auto;">
-        <canvas id="canvas" width="900" height="360"></canvas>
-        <button onclick="javascript:clearArea();return false;">Clear Area</button>
-        Line width : <select id="selWidth">
-            <option value="11">11</option>
-            <option value="13" selected="selected">13</option>
-            <option value="15">15</option>
-        </select>
-        Color : 
-            <label for="selColor" class="form-label">Color picker</label>
-<input type="color" class="form-control form-control-color" id="selColor" value="#563d7c" title="Choose your color">
-        
-        </div>
+</style>
+
+<div id="canvas_div" style="overflow-x: auto;">
+    <canvas id="canvas" width="500px" height="500px"></canvas>
+    <button onclick="javascript:clearArea();return false;">Clear Area</button>
+    <div>
+        <label for="customRange1" class="form-label">Example range</label>
+    <input type="range" class="form-range" id="selWidth" min="1" max="99">
+    Color :
+    <label for="selColor" class="form-label">Color picker</label>
+    <input type="color" class="form-control form-control-color" id="selColor" value="#563d7c" title="Choose your color">
+    </div>
+    Line width :
+    
+
+</div>
 
 
-    <script src="/js/draw.js"></script>
+<script src="/js/draw.js"></script>

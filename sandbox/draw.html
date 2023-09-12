@@ -4,11 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" a href="./style.css"/>
 </head>
-<body>
-    <div id="drawPad">
-    <canvas id="myCanvas" width="300px" height="300px" style="border:1px solid #000000;"></canvas>
-    </div>
 
+<body>
+    
+    <div id="canvas_div" style="overflow-x: auto;">
+        <canvas id="canvas" width="900" height="360"></canvas>
+        <button onclick="javascript:clearArea();return false;">Clear Area</button>
+        Line width : <select id="selWidth">
+            <option value="11">11</option>
+            <option value="13" selected="selected">13</option>
+            <option value="15">15</option>
+        </select>
+        Color : <select id="selColor">
+            <option value="black">black</option>
+            <option value="blue" selected="selected">blue</option>
+            <option value="red">red</option>
+            <option value="green">green</option>
+            <option value="yellow">yellow</option>
+            <option value="gray">gray</option>
+        </select>
+        </div>
+
+
+    <script src="./draw.js"></script>
 </body>
 </html>

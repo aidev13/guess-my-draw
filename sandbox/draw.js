@@ -37,9 +37,13 @@ function drawLine(context, x1, y1, x2, y2) {
   context.strokeStyle = document.getElementById('selColor').value;
   context.lineWidth = document.getElementById('selWidth').value;
   context.lineJoin = "round";
+  // starting position
   context.moveTo(x1, y1);
+  // end position
   context.lineTo(x2, y2);
+  // closes line gaps in brush strokes
   context.closePath();
+  // finally draws line
   context.stroke();
 }
 

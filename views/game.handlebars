@@ -1,33 +1,33 @@
-<style>
-    #canvas_div {
-        text-align: center;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
+<div class="container-fluid">
 
-    canvas {
-        border: 2px solid black;
-    }
-    
-    
 
-</style>
+    <div class="row">
+        <div data-bs-theme="light" class="col">
+            <div class="row">
+                <div class="col d-flex justify-content-center">
+                    <button class="btn btn-outline-info mt-4" onclick="javascript:clearArea();return false;">Clear
+                        Canvas</button>
+                </div>
+            </div>
+            <canvas class="border border-3 mt-2 bg-light" id="canvas" width="630px" height="600px"></canvas>
+            <div class="row">
+                <div class="col-1">
+                    <input type="color" class="form-control form-control-color mt-2" id="selColor" value="#563d7c"
+                        title="Choose your color">
+                    <label for="selColor" class="form-label">Color</label>
+                </div>
+                <div class="col-11 text-center">
+                    <input type="range" class="form-range mt-2" id="selWidth" min="1" max="99">
+                    <label for="lineWidthSelector" class="form-label">Line Width</label>
+                </div>
+            </div>
+        </div>
 
-<div id="canvas_div" style="overflow-x: auto;">
-    <canvas id="canvas" width="500px" height="500px"></canvas>
-    <button onclick="javascript:clearArea();return false;">Clear Area</button>
-    <div>
-        <label for="customRange1" class="form-label">Example range</label>
-    <input type="range" class="form-range" id="selWidth" min="1" max="99">
-    Color :
-    <label for="selColor" class="form-label">Color picker</label>
-    <input type="color" class="form-control form-control-color" id="selColor" value="#563d7c" title="Choose your color">
+        <div id="chat-placeholder" class="col bg-light mx-5 my-5">
+            <h2>Chat Placeholder</h2>
+        </div>
     </div>
-    Line width :
-    
 
 </div>
-
 
 <script src="/js/draw.js"></script>

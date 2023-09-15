@@ -38,7 +38,6 @@ chatForm.addEventListener("submit", (event) => {
 });
 
 
-
 startButton.addEventListener("click", (event) => {
   socket.emit("requestStartGame")
 })

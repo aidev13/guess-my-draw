@@ -1,0 +1,16 @@
+1.) Any time event fires on user side, "ingest" event.
+ - parse pieces of event that need to be saved in DB (json object)
+- store in local storage cache on front end
+
+2.) Create interval loop that consumes cache
+- are we current writing to db?
+ - if not, grab next cached item and write to db
+- if writingToDb = true, prevent new writing to db until complete
+
+3.) Function that writes to db
+- every time it's called it writes to db from cache
+
+4.) Loading data from db
+
+5.) write function that synthesizes user actions (draw on everyone's canvas 
+simultaneously)

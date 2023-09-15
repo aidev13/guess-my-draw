@@ -29,6 +29,15 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
+router.get('/register', (req, res) => {
+  if (req.session.logged_in) {
+    res.redirect('/');
+    return;
+  }
+
+  res.render('register');
+});
+
 router.get('/game', (req, res) => {
   res.render('game')
 })

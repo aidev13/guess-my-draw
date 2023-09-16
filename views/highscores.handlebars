@@ -1,13 +1,12 @@
+<h1>High Scores</h1>
+<button type="button" href="/game"> Join Game! </button>
 {{#each users as |user| }}
 <div class="row align-center mb-5">
   <div class="col-md-6">
-    <h1>High Scores</h1>
-    <button type="button" href="/game"> Join Game! </button>
-    <br>
     <h2>{{user.name}}</h2>
   </div>
   <div class="col-md-6">
-    {{!-- add high scores here --}}
+    {{user.wins}}
   </div>
 </div>
 {{/each}}

@@ -11,6 +11,8 @@ const formatMessage = require("./utils/messageFormat");
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
+const { User } = require("./models");
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 const server = http.createServer(app);
@@ -39,32 +41,40 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
 
-
-let username = "username"
 let drawerID
 let players = []
 
-io.on("connection", socket => {
+io.on("connection", async socket => {
+  const user_id = socket.handshake.query.user_id
+  const user = await User.findByPk(user_id, {
+    raw: true,
+  })
+
   // push available socket IDs into empty players array
   players.push(socket.id)
-  console.log("players array:", players)
+  console.log("Players array on connection:", players)
   // Welcome current individual user only
-  socket.emit("message", formatMessage("SYSTEM", `Welcome to the game, ${socket.id}`))
+  socket.emit("message", formatMessage("SYSTEM", `Welcome to the game, ${user.name}`))
   
   // broadcast on new connection to everyone except user that's connecting
-  socket.broadcast.emit("message", formatMessage(username, `${socket.id} has joined the game`))
+  socket.broadcast.emit("message", formatMessage("SYSTEM", `${user.name} has joined the game`))
   
   // runs when user disconnects
-  socket.on("disconnect", () => {
-    players = players.filter(player => player.id !== socket.id)
-    // emits to everyone
-    io.emit("message", formatMessage("SYSTEM", `${socket.id} has left the game`))
+  socket.on("disconnect", async () => {
+    try {
+      players = players.filter(player => player !== socket.id)
+      console.log("After disconnect:", players)
+      // emits to everyone
+      io.emit("message", formatMessage("SYSTEM", `${user.name} has left the game`))
+    } catch(err) {
+      console.error(err)
+    }
   })
 
   // listen for chat message
   socket.on("chat message", (msg) => {
     // emit back to everyone on front end
-    io.emit("message", formatMessage("USER", msg))
+    io.emit("message", formatMessage(user.name, msg))
   })
 
   socket.on("requestStartGame", () => {
@@ -86,8 +96,6 @@ io.on("connection", socket => {
   socket.on("requestClearCanvases", () => {
     io.emit("clearCanvases")
   })
-
-
 });
 
 sequelize.sync({ force: false }).then(() => {

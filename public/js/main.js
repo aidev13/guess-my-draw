@@ -7,8 +7,13 @@ const drawingTools = document.getElementsByClassName("drawingTools");
 const clearButton = document.getElementById("clearButton");
 const messageArea = document.getElementById("messageArea");
 const drawerAlertField = document.getElementById('drawerAlertField');
+const userIdEl = document.getElementById("user_id");
+const user_id = userIdEl.dataset.user_id
+let isDrawer;
 
-const socket = io();
+console.log(`${window.location.origin}?user_id=${user_id}`)
+
+const socket = io.connect(`${window.location.origin}?user_id=${user_id}`);
 
 // event listener for chat form input and button
 chatForm.addEventListener("submit", (event) => {
@@ -41,7 +46,6 @@ clearButton.addEventListener("click", () => {
 
 socket.on("clearCanvases", clearArea);
 
-let isDrawer;
 
 socket.on("startGame", ({ drawerID, randomWord }) => {
   console.log("drawerID:", drawerID, "socket.id:", socket.id)
@@ -63,9 +67,9 @@ socket.on("startGame", ({ drawerID, randomWord }) => {
 // Output messages to DOM
 function outputMessage(message) {
   const div = document.createElement("div")
-  div.classList.add("chatMessage", "card", "bg-info", "mt-2")
+  div.classList.add("chatMessage", "card", "bg-info", "bg-gradient", "bg-opacity-50", "mt-2")
   div.innerHTML = `
-  <div class="card-header text-dark">
+  <div class="card-header text-dark bg-gradient">
   ${message.username}, ${message.time}
   </div>
   <div class="card-body meta text-dark">

@@ -6,6 +6,7 @@ const exphbs = require('express-handlebars');
 const socketio = require("socket.io")
 const routes = require('./controllers');
 const helpers = require('./utils/helpers');
+const formatMessage = require("./utils/messageFormat");
 
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
@@ -38,16 +39,32 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
 
+
+let username = "username"
 let drawerID
 let players = []
+
 io.on("connection", socket => {
+  // push available socket IDs into empty players array
   players.push(socket.id)
-
   // Welcome current individual user only
-  socket.emit("message", `Welcome to the game ${socket.id}`)
-
+  socket.emit("message", formatMessage("SYSTEM", `Welcome to the game, ${socket.id}`))
+  
   // broadcast on new connection to everyone except user that's connecting
-  socket.broadcast.emit("message", `${socket.id} has joined the game`)
+  socket.broadcast.emit("message", formatMessage(username, `${socket.id} has joined the game`))
+  
+  // runs when user disconnects
+  socket.on("disconnect", () => {
+    players = players.filter(player => player.id !== socket.id)
+    // emits to everyone
+    io.emit("message", formatMessage("SYSTEM", `${socket.id} has left the game`))
+  })
+
+  // listen for chat message
+  socket.on("chat message", (msg) => {
+    // emit back to everyone on front end
+    io.emit("message", formatMessage("USER", msg))
+  })
 
   socket.on("requestStartGame", () => {
     // choose random player from players[] as drawer
@@ -64,18 +81,7 @@ io.on("connection", socket => {
     io.emit("clearCanvases")
   })
 
-  // runs when user disconnects
-  socket.on("disconnect", () => {
-    players = players.filter(player => player.id !== socket.id)
-    // emits to everyone
-    io.emit("message", `${socket.id} has left the game`)
-  })
 
-  // listen for chat message
-  socket.on("chat message", (msg) => {
-    // emit back to everyone on front end
-    io.emit("message", msg)
-  })
 });
 
 sequelize.sync({ force: false }).then(() => {

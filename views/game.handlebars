@@ -1,7 +1,9 @@
 <div class="container-fluid">
     <div class="row">
         <div data-bs-theme="light" class="col mx-2">
+
             <button id="startButton" class="btn btn-primary">Start</button>
+
             <div id="canvasContainer" class="d-none">
                 <div class="row">
                     <div class="col d-flex justify-content-center">
@@ -11,18 +13,22 @@
                     </div>
                 </div>
                 <canvas class="border border-3 mt-2 bg-light" id="canvas" width="630px" height="600px"></canvas>
+
                 <div class="row">
+                    
                     <div class="col-1">
                         {{!-- colorPicker --}}
-                        <input type="color" class="form-control form-control-color mt-2 drawingTools" id="selColor" value="#563d7c"
-                            title="Choose your color">
+                        <input type="color" class="form-control form-control-color mt-2 drawingTools" id="selColor"
+                            value="#563d7c" title="Choose your color">
                         <label for="selColor" class="form-label">Color</label>
                     </div>
+
                     <div class="col-11 text-center">
                         {{!-- line width selector --}}
                         <input type="range" class="form-range mt-2 drawingTools" id="selWidth" min="1" max="99">
                         <label for="lineWidthSelector" class="form-label">Line Width</label>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -30,14 +36,12 @@
         <div id="chatArea" class="col bg-light mx-5 mt-5" style="height: 600px;">
             <div class="row" style="height: 600px;">
                 <div id="messageArea" class="col-9">
-                    <div class="chatMessage">
-                        <p class="meta">Name<span>Time</span></p>
-                        <p class="ChatText"></p>
-                    </div>
+                    {{!-- <div class="chatMessage">
+                        <p class="meta text-dark">Name<span>Time</span></p>
+                        <p class="chatText text-dark"></p>
+                    </div> --}}
                 </div>
                 <div id="chat-sidebar" class="col-3 border h-100 text-black">
-                    <h3>Room:</h3>
-                    <h4>Room 1</h4>
                     <h3>Users:</h3>
                     <ul id="userList">
                         <li>Max</li>
@@ -58,5 +62,4 @@
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/draw.js"></script>
-<script src="/js/chat.js"></script>
+<script src="/js/main.js"></script>

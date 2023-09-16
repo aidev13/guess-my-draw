@@ -4,6 +4,7 @@ const chatSendButton = document.getElementById("chatSendButton")
 const startButton = document.getElementById("startButton");
 const canvasContainer = document.getElementById("canvasContainer");
 const clearButton = document.getElementById("clearButton");
+const messageArea = document.getElementById("messageArea");
 
 
 const socket = io();
@@ -14,27 +15,21 @@ let isDrawer;
 socket.on("message", message => {
   console.log(message)
   outputMessage(message)
+
+  // scroll down chat window on new message
+  messageArea.scrollTop = messageArea.scrollHeight
 });
-
-socket.on("startGame", ({ drawerID, randomWord }) => {
-  console.log(drawerID, socket.id)
-  startButton.classList.add("d-none")
-  canvasContainer.classList.remove("d-none")
-  isDrawer = drawerID === socket.id
-  // select all drawingTools
-    // loop through drawingTools
-      // for each
-        // add d-none
-
-})
 
 // event listener for chat form input and button
 chatForm.addEventListener("submit", (event) => {
   event.preventDefault()
   // get message text
-  const msg = chatInput.value
+  let msg = chatInput.value
   // emit message to server
   socket.emit("chat message", msg)
+  // clear input and re-focus on it after message is sent
+  chatInput.value = ""
+  chatInput.focus()
 });
 
 
@@ -48,9 +43,30 @@ clearButton.addEventListener("click", () => {
 
 socket.on("clearCanvases", clearArea)
 
-// Output message to DOM
+socket.on("startGame", ({ drawerID, randomWord }) => {
+  console.log(drawerID, socket.id)
+  startButton.classList.add("d-none")
+  canvasContainer.classList.remove("d-none")
+  isDrawer = drawerID === socket.id
+  // select all drawingTools
+    // loop through drawingTools
+      // for each
+        // add d-none
+
+})
+
+// Output messages to DOM
 function outputMessage(message) {
   const div = document.createElement("div")
+  div.classList.add("chatMessage", "card", "bg-info", "mt-1")
+  div.innerHTML = `
+  <div class="card-header text-dark">
+  ${message.username}, ${message.time}
+  </div>
+  <div class="card-body meta text-dark">
+  <p class="card-text chatText text-dark">${message.text}</p>
+  </div>`
+  messageArea.appendChild(div)
 }
 
 function clearArea() {

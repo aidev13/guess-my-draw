@@ -11,7 +11,6 @@ const userIdEl = document.getElementById("user_id");
 const user_id = userIdEl.dataset.user_id
 let isDrawer;
 
-console.log(`${window.location.origin}?user_id=${user_id}`)
 
 const socket = io.connect(`${window.location.origin}?user_id=${user_id}`);
 

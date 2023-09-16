@@ -14,6 +14,7 @@ router.get('/', withAuth, async (req, res) => {
     res.render('highscores', {
       users,
       logged_in: req.session.logged_in,
+      showNav: true,
     });
   } catch (err) {
     res.status(500).json(err);
@@ -25,8 +26,9 @@ router.get('/login', (req, res) => {
     res.redirect('/');
     return;
   }
-
-  res.render('login');
+  res.render('login', {
+    showNav: false,
+  });
 });
 
 router.get('/register', (req, res) => {
@@ -34,12 +36,19 @@ router.get('/register', (req, res) => {
     res.redirect('/');
     return;
   }
-  res.render('register');
+  res.render('register', {
+    showNav: false,
+  });
 });
 
 router.get('/game', (req, res) => {
   if (req.session.logged_in) {
-    res.render('game', { user_id: req.session.user_id })
+    res.render('game', {
+    logged_in: req.session.logged_in,
+    user_id: req.session.user_id,
+    showNav: true,
+    hidePlayGameBtn: true,
+  })
     return
   }
   res.redirect("/login")

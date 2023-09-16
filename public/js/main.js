@@ -45,14 +45,13 @@ clearButton.addEventListener("click", () => {
 
 socket.on("clearCanvases", clearArea);
 
-
 socket.on("startGame", ({ drawerID, randomWord }) => {
   console.log("drawerID:", drawerID, "socket.id:", socket.id)
   startButton.classList.add("d-none")
   canvasContainer.classList.remove("d-none")
   isDrawer = drawerID === socket.id
   if (isDrawer) {
-    drawerAlertField.innerText = "You are the drawer!"
+    drawerAlertField.innerText = `You are the drawer!  Draw: ${randomWord}`
   } else if(!isDrawer) {
     drawerAlertField.innerText = "You are guessing!"
     // loop through drawingTools
@@ -66,7 +65,7 @@ socket.on("startGame", ({ drawerID, randomWord }) => {
 // Output messages to DOM
 function outputMessage(message) {
   const div = document.createElement("div")
-  div.classList.add("chatMessage", "card", "bg-info", "bg-gradient", "bg-opacity-50", "mt-2")
+  div.classList.add("chatMessage", "card", "bg-info", "bg-gradient", "bg-opacity-50", "my-2")
   div.innerHTML = `
   <div class="card-header text-dark bg-gradient">
   ${message.username}, ${message.time}
@@ -87,9 +86,7 @@ function clearArea() {
 
 
 
-
-
-
+// begin drawing code
 
 
 // When true, moving the mouse draws on the canvas

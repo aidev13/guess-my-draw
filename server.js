@@ -7,6 +7,7 @@ const socketio = require("socket.io")
 const routes = require('./controllers');
 const helpers = require('./utils/helpers');
 const formatMessage = require("./utils/messageFormat");
+const getRandomWords = require('word-pictionary-list');
 
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
@@ -41,8 +42,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
 
+// begin socket code
+
 let drawerID
 let players = []
+let randomWord
 
 io.on("connection", async socket => {
   const user_id = socket.handshake.query.user_id
@@ -69,13 +73,23 @@ io.on("connection", async socket => {
     }
   })
 
+  function checkGuess(msg) {
+    return msg.toLowerCase().trim() === randomWord
+  }
+
   // listen for chat message
-  socket.on("chat message", (msg) => {
+  socket.on("chat message", async (msg) => {
     // emit back to everyone on front end
     io.emit("message", formatMessage(user.name, msg))
+    const correctGuess =  checkGuess(msg)
+    if (correctGuess) {
+      await User.increment({ wins:1 }, { where: {id: user_id } })
+      io.emit("message", formatMessage("SYSTEM", `${user.name} guessed correctly!  The word was "${randomWord}"`))
+    }
   })
 
   socket.on("requestStartGame", () => {
+    randomWord = getRandomWords()
     // get a random index
     let randomIndex = Math.floor(Math.random() * players.length)
     // If there is currently only 1 player then they are assigned as drawer
@@ -86,7 +100,8 @@ io.on("connection", async socket => {
       drawerID = players[randomIndex]
     }
     // emit and broadcast startGame event
-    io.emit("startGame", {drawerID, randomWord: "test"})
+    io.emit("startGame", {drawerID, randomWord})
+    randomWord = randomWord.toLowerCase().trim() // normalize random word
   })
 
   socket.on('drawing', (data) => socket.broadcast.emit('drawing', data));

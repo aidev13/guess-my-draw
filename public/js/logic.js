@@ -19,15 +19,9 @@ const wordsList = ["Shoe","Door", "Trash Can", "Christmas Tree"
 "Mailbox",	"Nose",	"Tree",	"Cat",
 "Leg",	"Lips",	"Cloud","Orange"]
 
-console.log(nameInput, emailInput, passwordInput )
+
 
 let word = wordsList[Math.floor(Math.random() * wordsList.length)];
-
-
-
-
-
-
 
 console.log(word)
 document.getElementById("word").textContent = word;

@@ -5,11 +5,14 @@ const startButton = document.getElementById("startButton");
 const canvasContainer = document.getElementById("canvasContainer");
 const clearButton = document.getElementById("clearButton");
 const messageArea = document.getElementById("messageArea");
+const drawing = document.getElementById('drawing')
 
 
 const socket = io();
 
 let isDrawer;
+
+
 
 // listener to catch incomming socket messages from the server
 socket.on("message", message => {
@@ -35,6 +38,7 @@ chatForm.addEventListener("submit", (event) => {
 
 startButton.addEventListener("click", (event) => {
   socket.emit("requestStartGame")
+  
 })
 
 clearButton.addEventListener("click", () => {
@@ -43,11 +47,25 @@ clearButton.addEventListener("click", () => {
 
 socket.on("clearCanvases", clearArea)
 
+const drawerAlert = () => {
+    drawing.innerText = "You are the drawer!"
+    clearButton.style.display = "";
+}
+const guessAlert = () => {  
+  drawing.innerText = "You are guessing!"
+  clearButton.style.display = "none";
+}
+
 socket.on("startGame", ({ drawerID, randomWord }) => {
   console.log(drawerID, socket.id)
   startButton.classList.add("d-none")
   canvasContainer.classList.remove("d-none")
   isDrawer = drawerID === socket.id
+  if (isDrawer === true) {
+    drawerAlert()
+  } else if(isDrawer === false) {
+    guessAlert()
+  }
   // select all drawingTools
     // loop through drawingTools
       // for each
@@ -91,6 +109,7 @@ let y = 0;
 
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
+
 
 // event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.
 

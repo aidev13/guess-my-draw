@@ -52,7 +52,6 @@ io.on("connection", async socket => {
 
   // push available socket IDs into empty players array
   players.push(socket.id)
-  console.log("Players array on connection:", players)
   // Welcome current individual user only
   socket.emit("message", formatMessage("SYSTEM", `Welcome to the game, ${user.name}`))
   
@@ -63,7 +62,6 @@ io.on("connection", async socket => {
   socket.on("disconnect", async () => {
     try {
       players = players.filter(player => player !== socket.id)
-      console.log("After disconnect:", players)
       // emits to everyone
       io.emit("message", formatMessage("SYSTEM", `${user.name} has left the game`))
     } catch(err) {

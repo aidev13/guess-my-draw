@@ -12,7 +12,7 @@
                 <canvas class="border border-3 mt-2 bg-light" id="canvas" width="630px" height="600px"></canvas>
 
                 <div class="row">
-                    
+
                     <div class="col-1">
                         {{!-- colorPicker --}}
                         <input type="color" class="form-control form-control-color mt-2 drawingTools" id="selColor"
@@ -22,7 +22,8 @@
 
                     <div class="col-9 text-center ps-4">
                         {{!-- line width selector --}}
-                        <input type="range" class="form-range mt-2 drawingTools" id="selWidth" min="1" max="30" step="1">
+                        <input type="range" class="form-range mt-2 drawingTools" id="selWidth" min="1" max="30"
+                            step="1">
                         <label for="lineWidthSelector" class="form-label drawingTools">Line Width</label>
                     </div>
                     <div class="col-2">
@@ -35,8 +36,8 @@
             </div>
         </div>
 
-        <div id="chatArea" class="col bg-light mx-5 mt-2" style="height: 600px;">
-            <div class="row" style="height: 600px;">
+        <div id="chatArea" class="col bg-light mx-5 mt-2">
+            <div class="row" style="height: 600px; overflow: hidden;">
                 <div id="messageArea" class="col-9"></div>
                 <div id="chat-sidebar" class="col-3 border h-100 text-black">
                     <h3>Users:</h3>
@@ -47,13 +48,17 @@
                         <li>Mitchell</li>
                     </ul>
                 </div>
-                <div class="col-12">
-                    <form id="chatForm">
-                        <input id="chatInput" class="mt-2" type="text" placeholder="Enter Message" autocomplete="off">
-                        <button id="chatSendButton" class="btn btn-outline-info">Send</button>
-                    </form>
-                </div>
             </div>
+            <form id="chatForm">
+                <div class="row border">
+                    <div class="col-9 px-1 py-1">
+                        <input id="chatInput" class="w-100" type="text" placeholder="Enter Message" autocomplete="off">
+                    </div>
+                    <div class="col-3 px-1 py-1">
+                        <button id="chatSendButton" class="btn btn-outline-info w-100">Send</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

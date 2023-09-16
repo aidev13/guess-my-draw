@@ -17,14 +17,14 @@
 
                 <div class="row">
                     
-                    <div class="col-1">
+                    <div class="col-1" id="colorPicker">
                         {{!-- colorPicker --}}
                         <input type="color" class="form-control form-control-color mt-2 drawingTools" id="selColor"
                             value="#563d7c" title="Choose your color">
                         <label for="selColor" class="form-label">Color</label>
                     </div>
 
-                    <div class="col-11 text-center">
+                    <div class="col-11 text-center" id="lineWidth">
                         {{!-- line width selector --}}
                         <input type="range" class="form-range mt-2 drawingTools" id="selWidth" min="1" max="99">
                         <label for="lineWidthSelector" class="form-label">Line Width</label>
@@ -33,6 +33,9 @@
                 </div>
             </div>
         </div>
+
+
+        {{!-- Chat --}}
 
         <div id="chatArea" class="col bg-light mx-5 mt-5" style="height: 600px;">
             <div class="row" style="height: 600px;">

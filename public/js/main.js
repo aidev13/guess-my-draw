@@ -5,6 +5,8 @@ const startButton = document.getElementById("startButton");
 const canvasContainer = document.getElementById("canvasContainer");
 const clearButton = document.getElementById("clearButton");
 const messageArea = document.getElementById("messageArea");
+const lineWidth = document.getElementById('lineWidth')
+const colorPicker = document.getElementById('colorPicker')
 const drawing = document.getElementById('drawing')
 
 
@@ -49,11 +51,13 @@ socket.on("clearCanvases", clearArea)
 
 const drawerAlert = () => {
     drawing.innerText = "You are the drawer!"
-    clearButton.style.display = "";
 }
 const guessAlert = () => {  
   drawing.innerText = "You are guessing!"
   clearButton.style.display = "none";
+  lineWidth.style.display = "none";
+  colorPicker.style.display = "none"
+
 }
 
 socket.on("startGame", ({ drawerID, randomWord }) => {

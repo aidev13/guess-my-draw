@@ -34,7 +34,12 @@ User.init(
       validate: {
         len: [8],
       },
-    },
+    }, 
+    wins: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+
+    }
   },
   {
     hooks: {

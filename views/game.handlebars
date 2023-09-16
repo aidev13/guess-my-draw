@@ -1,18 +1,13 @@
 <div class="container-fluid">
     <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <button id="startButton" class="btn btn-lg btn-outline-info my-4">Start Game</button>
+            <div id="drawerAlertField" class="d-flex justify-content-center my-3 fs-2"></div>
+        </div>
         <div data-bs-theme="light" class="col mx-2">
 
-            <button id="startButton" class="btn btn-primary">Start</button>
-
             <div id="canvasContainer" class="d-none">
-                <div class="row">
-                    <div class="col d-flex justify-content-center">
-                        {{!-- clearButton --}}
-                        <button id="clearButton" class="btn btn-outline-info mt-4 drawingTools">Clear
-                            Canvas</button>
-                    </div>
-                    <div id="drawing"></div>
-                </div>
+
                 <canvas class="border border-3 mt-2 bg-light" id="canvas" width="630px" height="600px"></canvas>
 
                 <div class="row">
@@ -20,28 +15,28 @@
                     <div class="col-1">
                         {{!-- colorPicker --}}
                         <input type="color" class="form-control form-control-color mt-2 drawingTools" id="selColor"
-                            value="#563d7c" title="Choose your color">
+                            value="#3696BF" title="Choose your color">
                         <label for="selColor" class="form-label">Color</label>
                     </div>
 
-                    <div class="col-11 text-center">
+                    <div class="col-9 text-center ps-4">
                         {{!-- line width selector --}}
-                        <input type="range" class="form-range mt-2 drawingTools" id="selWidth" min="1" max="99">
+                        <input type="range" class="form-range mt-2 drawingTools" id="selWidth" min="1" max="30" step="1">
                         <label for="lineWidthSelector" class="form-label">Line Width</label>
+                    </div>
+                    <div class="col-2">
+                        {{!-- clearButton --}}
+                        <button id="clearButton" class="btn btn-outline-info mt-1 drawingTools">Clear
+                            Canvas</button>
                     </div>
 
                 </div>
             </div>
         </div>
 
-        <div id="chatArea" class="col bg-light mx-5 mt-5" style="height: 600px;">
+        <div id="chatArea" class="col bg-light mx-5 mt-2" style="height: 600px;">
             <div class="row" style="height: 600px;">
-                <div id="messageArea" class="col-9">
-                    {{!-- <div class="chatMessage">
-                        <p class="meta text-dark">Name<span>Time</span></p>
-                        <p class="chatText text-dark"></p>
-                    </div> --}}
-                </div>
+                <div id="messageArea" class="col-9"></div>
                 <div id="chat-sidebar" class="col-3 border h-100 text-black">
                     <h3>Users:</h3>
                     <ul id="userList">
@@ -53,7 +48,7 @@
                 </div>
                 <div class="col-12">
                     <form id="chatForm">
-                        <input id="chatInput" type="text" placeholder="Enter Message" autocomplete="off">
+                        <input id="chatInput" class="mt-2" type="text" placeholder="Enter Message" autocomplete="off">
                         <button id="chatSendButton" class="btn btn-outline-info">Send</button>
                     </form>
                 </div>

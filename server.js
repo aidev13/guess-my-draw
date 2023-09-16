@@ -47,6 +47,7 @@ let players = []
 io.on("connection", socket => {
   // push available socket IDs into empty players array
   players.push(socket.id)
+  console.log("players array:", players)
   // Welcome current individual user only
   socket.emit("message", formatMessage("SYSTEM", `Welcome to the game, ${socket.id}`))
   
@@ -67,10 +68,15 @@ io.on("connection", socket => {
   })
 
   socket.on("requestStartGame", () => {
-    // choose random player from players[] as drawer
+    // get a random index
     let randomIndex = Math.floor(Math.random() * players.length)
-    // assign into drawerID variable
-    drawerID = players[randomIndex]
+    // If there is currently only 1 player then they are assigned as drawer
+    if (players.length === 1) {
+      drawerID = players[0]
+      // if there is more than 1 player then drawer is assigned randomly
+    } else {
+      drawerID = players[randomIndex]
+    }
     // emit and broadcast startGame event
     io.emit("startGame", {drawerID, randomWord: "test"})
   })

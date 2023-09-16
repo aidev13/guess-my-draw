@@ -34,12 +34,15 @@ router.get('/register', (req, res) => {
     res.redirect('/');
     return;
   }
-
   res.render('register');
 });
 
 router.get('/game', (req, res) => {
-  res.render('game')
-})
+  if (req.session.logged_in) {
+    res.render('game', { user_id: req.session.user_id })
+    return
+  }
+  res.redirect("/login")
+});
 
 module.exports = router;

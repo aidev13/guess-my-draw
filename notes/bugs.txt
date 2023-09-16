@@ -1,0 +1,12 @@
+
+
+- can't draw dots, drawing only triggers with mouse movement
+
+- drawing persists if mousedown is held when cursor goes off canvas edge
+
+- chat messages continue off bottom edge of chat window
+
+- logout button non-functional on game page (session not implemented?)
+
+- bootstrap background color classes never seem to display as shown in docs
+

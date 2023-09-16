@@ -3,27 +3,16 @@ const chatInput = document.getElementById("chatInput");
 const chatSendButton = document.getElementById("chatSendButton")
 const startButton = document.getElementById("startButton");
 const canvasContainer = document.getElementById("canvasContainer");
+const drawingTools = document.getElementsByClassName("drawingTools");
 const clearButton = document.getElementById("clearButton");
 const messageArea = document.getElementById("messageArea");
-const lineWidth = document.getElementById('lineWidth')
-const colorPicker = document.getElementById('colorPicker')
-const drawing = document.getElementById('drawing')
-
-
-const socket = io();
-
+const drawerAlertField = document.getElementById('drawerAlertField');
+const userIdEl = document.getElementById("user_id");
+const user_id = userIdEl.dataset.user_id
 let isDrawer;
 
 
-
-// listener to catch incomming socket messages from the server
-socket.on("message", message => {
-  console.log(message)
-  outputMessage(message)
-
-  // scroll down chat window on new message
-  messageArea.scrollTop = messageArea.scrollHeight
-});
+const socket = io.connect(`${window.location.origin}?user_id=${user_id}`);
 
 // event listener for chat form input and button
 chatForm.addEventListener("submit", (event) => {
@@ -37,52 +26,49 @@ chatForm.addEventListener("submit", (event) => {
   chatInput.focus()
 });
 
+// listener to catch incomming socket messages from the server
+socket.on("message", message => {
+  // console.log(message)
+  outputMessage(message)
+
+  // scroll down chat window on new message
+  messageArea.scrollTop = messageArea.scrollHeight
+});
 
 startButton.addEventListener("click", (event) => {
   socket.emit("requestStartGame")
-  
-})
+});
 
 clearButton.addEventListener("click", () => {
   socket.emit("requestClearCanvases")
-})
+});
 
-socket.on("clearCanvases", clearArea)
+socket.on("clearCanvases", clearArea);
 
-const drawerAlert = () => {
-    drawing.innerText = "You are the drawer!"
-}
-const guessAlert = () => {  
-  drawing.innerText = "You are guessing!"
-  clearButton.style.display = "none";
-  lineWidth.style.display = "none";
-  colorPicker.style.display = "none"
-
-}
 
 socket.on("startGame", ({ drawerID, randomWord }) => {
-  console.log(drawerID, socket.id)
+  console.log("drawerID:", drawerID, "socket.id:", socket.id)
   startButton.classList.add("d-none")
   canvasContainer.classList.remove("d-none")
   isDrawer = drawerID === socket.id
-  if (isDrawer === true) {
-    drawerAlert()
-  } else if(isDrawer === false) {
-    guessAlert()
-  }
-  // select all drawingTools
+  if (isDrawer) {
+    drawerAlertField.innerText = "You are the drawer!"
+  } else if(!isDrawer) {
+    drawerAlertField.innerText = "You are guessing!"
     // loop through drawingTools
-      // for each
-        // add d-none
-
-})
+    for (const drawingTool of drawingTools) {
+      // add hidden class to each
+      drawingTool.classList.add("d-none")
+    }
+  }
+});
 
 // Output messages to DOM
 function outputMessage(message) {
   const div = document.createElement("div")
-  div.classList.add("chatMessage", "card", "bg-info", "mt-1")
+  div.classList.add("chatMessage", "card", "bg-info", "bg-gradient", "bg-opacity-50", "mt-2")
   div.innerHTML = `
-  <div class="card-header text-dark">
+  <div class="card-header text-dark bg-gradient">
   ${message.username}, ${message.time}
   </div>
   <div class="card-body meta text-dark">

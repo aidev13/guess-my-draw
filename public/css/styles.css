@@ -3,6 +3,15 @@
   overflow-y: auto;
 }
 
+#chatArea {
+  height: calc(100vh - 68px);
+}
+
+canvas {
+  height: 600px;
+  width: 600px;
+}
+
 @media (min-width: 992px) {
   .navbar-expand-lg .navbar-collapse {
       display: flex!important;

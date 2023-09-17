@@ -1,25 +1,18 @@
-{{!-- This allows us to send the user IDs between frontend and backend --}}
 <div id="user_id" class="d-none" data-user_id="{{user_id}}"></div>
-
-{{!-- Begin page style --}}
 <div class="container-fluid">
     <div class="row">
-
-        <div data-bs-theme="light" class="col-9">
-            <div class="col-12 d-flex justify-content-center">
-
-                <button id="startButton" class="btn btn-lg btn-outline-info my-4">Start Game</button>
-
-                <div id="drawerAlertField" class="d-flex justify-content-center my-3 fs-2"></div>
-
-            </div>
+        <div class="col-12 d-flex justify-content-center">
+            <button id="startButton" class="btn btn-lg btn-outline-info my-4">Start Game</button>
+            <div id="drawerAlertField" class="d-flex justify-content-center my-3 fs-2"></div>
+        </div>
+        <div data-bs-theme="light" class="col mx-2">
 
             <div id="canvasContainer" class="d-none">
 
-                <canvas class="border border-3 mt-2 bg-light" id="canvas"></canvas>
+                <canvas class="border border-3 mt-2 bg-light" id="canvas" width="630px" height="600px"></canvas>
 
                 <div class="row">
-
+                    
                     <div class="col-1" id="colorPicker">
                         {{!-- colorPicker --}}
                         <input type="color" class="form-control form-control-color mt-2 drawingTools" id="selColor"
@@ -33,7 +26,6 @@
                             step="1">
                         <label for="lineWidthSelector" class="form-label drawingTools">Line Width</label>
                     </div>
-
                     <div class="col-2">
                         {{!-- clearButton --}}
                         <button id="clearButton" class="btn btn-outline-info mt-1 drawingTools">Clear
@@ -44,31 +36,23 @@
             </div>
         </div>
 
-        <div id="chatArea" class="col-3 bg-light d-flex flex-column">
-            <div class="row flex-grow-1" style="overflow: hidden;">
-                
+        <div id="chatArea" class="col bg-light mx-5 mt-2">
+            <div class="row" style="height: 600px; overflow: hidden;">
                 <div id="messageArea" class="col-9 py-1"></div>
-                
-                <div id="chat-sidebar" class="col-3 border text-black">
+                <div id="chat-sidebar" class="col-3 border h-100 text-black">
                     <h3 class="text-center">Users</h3>
                     <ul id="userList" class="list-group list-group-flush text-center py-2">
                     </ul>
-                
                 </div>
             </div>
-
             <form id="chatForm">
                 <div class="row border">
-                    
                     <div class="col-9 px-1 py-1">
-                        <input id="chatInput" class=" type="text" placeholder="Enter Message" autocomplete="off">
-                    
+                        <input id="chatInput" class="w-100" type="text" placeholder="Enter Message" autocomplete="off">
                     </div>
-
                     <div class="col-3 px-1 py-1">
-                        <button id="chatSendButton" class="btn btn-outline-info">Send</button>
+                        <button id="chatSendButton" class="btn btn-outline-info w-100">Send</button>
                     </div>
-
                 </div>
             </form>
         </div>

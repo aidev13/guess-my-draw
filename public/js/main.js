@@ -60,7 +60,6 @@ clearButton.addEventListener("click", () => {
 socket.on("clearCanvases", clearArea);
 
 socket.on("startGame", ({ drawerID, randomWord }) => {
-  console.log("drawerID:", drawerID, "socket.id:", socket.id)
   startButton.classList.add("d-none")
   canvasContainer.classList.remove("d-none")
   isDrawer = drawerID === socket.id
@@ -103,6 +102,24 @@ let y = 0;
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 // event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.
+
+// Function to set canvas dimensions dynamically
+function setCanvasSize() {
+  // Get the pixel width and height of the canvas's container
+  const containerWidth = canvas.parentElement.clientWidth;
+  const containerHeight = canvas.parentElement.clientHeight;
+
+  // Set canvas dimensions to match the container size
+  canvas.width = containerWidth;
+  canvas.height = containerHeight;
+
+  // Scale the canvas's internal coordinate system to match the new size
+  const scaleX = canvas.width / canvas.offsetWidth;
+  const scaleY = canvas.height / canvas.offsetHeight;
+
+  context.scale(scaleX, scaleY);
+}
+// setCanvasSize()
 
 // event listeners to track the mouseButton state if they're outside the bounds of the canvas
 let isMouseButtonDown = false;

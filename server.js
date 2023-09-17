@@ -52,7 +52,10 @@ io.on("connection", async socket => {
   const user_id = socket.handshake.query.user_id
   const user = await User.findByPk(user_id, {
     raw: true,
+    // exclude password
   })
+
+  io.emit("activeUser", user)
 
   // push available socket IDs into empty players array
   players.push(socket.id)
@@ -68,6 +71,7 @@ io.on("connection", async socket => {
       players = players.filter(player => player !== socket.id)
       // emits to everyone
       io.emit("message", formatMessage("SYSTEM", `${user.name} has left the game`))
+      io.emit("userLeft", user)
     } catch(err) {
       console.error(err)
     }

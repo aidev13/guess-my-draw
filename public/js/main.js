@@ -15,6 +15,7 @@ const socket = io.connect(`${window.location.origin}?user_id=${user_id}`);
 
 let isDrawer;
 
+// displays active users in the chat sidebar
 socket.on("activeUser", (user) => {
   const li = document.createElement("li")
   li.setAttribute("id", user.id)
@@ -23,6 +24,7 @@ socket.on("activeUser", (user) => {
   userListEl.appendChild(li)
 })
 
+// removes users from chat sidebar when they disconnect
 socket.on("userLeft", user => {
   document.getElementById(user.id)?.remove()
 })
@@ -88,14 +90,10 @@ function outputMessage(message) {
   messageArea.appendChild(div)
 }
 
-function clearArea() {
-    context.setTransform(1, 0, 0, 1, 0, 0);
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-}
+
 
 
 // begin drawing code
-
 
 // When true, moving the mouse draws on the canvas
 let isDrawing = false;
@@ -104,9 +102,26 @@ let y = 0;
 
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
-
-
 // event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.
+
+// event listeners to track the mouseButton state if they're outside the bounds of the canvas
+let isMouseButtonDown = false;
+document.addEventListener('mousedown', () => {
+  isMouseButtonDown = true
+});
+
+document.addEventListener('mouseup', () => {
+  isMouseButtonDown = false
+});
+
+// event listener for drawing dots without moving cursor
+canvas.addEventListener('click', (e) => {
+  if (isDrawer) {
+    let color = document.getElementById('selColor').value
+    let lineWidth = document.getElementById('selWidth').value
+    drawDot(context, e.offsetX, e.offsetY, color, lineWidth)
+  }
+});
 
 // Add the event listeners for mousedown, mousemove, and mouseup
 canvas.addEventListener('mousedown', (e) => {
@@ -118,7 +133,7 @@ canvas.addEventListener('mousedown', (e) => {
 });
 
 canvas.addEventListener('mousemove', (e) => {
-  if (isDrawer && isDrawing) {
+  if (isDrawer && isDrawing && isMouseButtonDown) {
     let color = document.getElementById('selColor').value;
     let lineWidth = document.getElementById('selWidth').value
     drawLine(context, x, y, e.offsetX, e.offsetY, color, lineWidth);
@@ -138,6 +153,7 @@ canvas.addEventListener('mouseup', (e) => {
   }
 });
 
+// function for drawing lines while moving cursor
 function drawLine(context, x1, y1, x2, y2, color, lineWidth) {
   context.beginPath();
   context.strokeStyle = color
@@ -151,7 +167,8 @@ function drawLine(context, x1, y1, x2, y2, color, lineWidth) {
   context.closePath();
   // finally draws line
   context.stroke();
-
+  
+  // if you're the drawer, send drawing data over sockets
   if (isDrawer) {
     socket.emit('drawing', {
       x1,
@@ -164,12 +181,40 @@ function drawLine(context, x1, y1, x2, y2, color, lineWidth) {
   }
 }
 
+// function for drawing dots without moving cursor
+function drawDot(context, x, y, color, lineWidth) {
+  context.beginPath()
+  context.fillStyle = color
+  // Adjust the radius based on half of the lineWidth
+  context.arc(x, y, lineWidth / 2, 0, Math.PI * 2)
+  context.fill()
+
+  // if you're the drawer, send drawing data over sockets
+  if (isDrawer) {
+    socket.emit('drawing', {
+      x1: x,
+      y1: y,
+      x2: x,
+      y2: y,
+      color,
+      lineWidth
+    });
+  }
+};
+
+// function to clear canvas
+function clearArea() {
+  context.setTransform(1, 0, 0, 1, 0, 0);
+  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+};
+
+// socket listener to recieve drawing data
 socket.on("drawing", (drawingData) => {
   drawLine(context,
-    drawingData.x1, 
-    drawingData.y1, 
-    drawingData.x2,
-    drawingData.y2,
-    drawingData.color,
-    drawingData.lineWidth)
-})
+  drawingData.x1, 
+  drawingData.y1, 
+  drawingData.x2,
+  drawingData.y2,
+  drawingData.color,
+  drawingData.lineWidth)
+});

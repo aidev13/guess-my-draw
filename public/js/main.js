@@ -1,3 +1,5 @@
+const userIdEl = document.getElementById("user_id");
+const user_id = userIdEl.dataset.user_id
 const chatForm = document.getElementById("chatForm");
 const chatInput = document.getElementById("chatInput");
 const chatSendButton = document.getElementById("chatSendButton")
@@ -6,13 +8,24 @@ const canvasContainer = document.getElementById("canvasContainer");
 const drawingTools = document.getElementsByClassName("drawingTools");
 const clearButton = document.getElementById("clearButton");
 const messageArea = document.getElementById("messageArea");
+const userListEl = document.getElementById("userList")
 const drawerAlertField = document.getElementById('drawerAlertField');
-const userIdEl = document.getElementById("user_id");
-const user_id = userIdEl.dataset.user_id
-let isDrawer;
-
 
 const socket = io.connect(`${window.location.origin}?user_id=${user_id}`);
+
+let isDrawer;
+
+socket.on("activeUser", (user) => {
+  const li = document.createElement("li")
+  li.setAttribute("id", user.id)
+  li.classList.add("list-group-item", "badge", "text-bg-info", "my-1")
+  li.textContent = `${user.name}`
+  userListEl.appendChild(li)
+})
+
+socket.on("userLeft", user => {
+  document.getElementById(user.id)?.remove()
+})
 
 // event listener for chat form input and button
 chatForm.addEventListener("submit", (event) => {
@@ -30,7 +43,6 @@ chatForm.addEventListener("submit", (event) => {
 socket.on("message", message => {
   // console.log(message)
   outputMessage(message)
-
   // scroll down chat window on new message
   messageArea.scrollTop = messageArea.scrollHeight
 });
@@ -80,10 +92,6 @@ function clearArea() {
     context.setTransform(1, 0, 0, 1, 0, 0);
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 }
-
-
-
-
 
 
 // begin drawing code

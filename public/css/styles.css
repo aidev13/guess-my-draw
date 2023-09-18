@@ -3,6 +3,15 @@
   overflow-y: auto;
 }
 
+/* should be dynamically setting the height of the chat area and canvas container */
+#chatArea {
+  height: calc(100vh - 68px);
+}
+
+#canvasContainer {
+  height: calc(100vh - 215px);
+}
+
 @media (min-width: 992px) {
   .navbar-expand-lg .navbar-collapse {
       display: flex!important;

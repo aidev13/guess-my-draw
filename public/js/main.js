@@ -15,19 +15,29 @@ const socket = io.connect(`${window.location.origin}?user_id=${user_id}`);
 
 let isDrawer;
 
-// displays active users in the chat sidebar
-socket.on("activeUser", (user) => {
-  const li = document.createElement("li")
-  li.setAttribute("id", user.id)
-  li.classList.add("list-group-item", "badge", "text-bg-info", "my-1")
-  li.textContent = `${user.name}`
-  userListEl.appendChild(li)
-})
+socket.on("activePlayers", players => {
+  for (const player of players) {
+    const li = document.createElement("li")
+    li.setAttribute("id", player.id)
+    li.classList.add("list-group-item", "badge", "text-bg-info", "my-1", "mx-1")
+    li.textContent = `${player.name}`
+    userListEl.appendChild(li)
+  }
+});
+
+// // displays active users in the chat sidebar
+// socket.on("activePlayers", (user) => {
+//   const li = document.createElement("li")
+//   li.setAttribute("id", user.id)
+//   li.classList.add("list-group-item", "badge", "text-bg-info", "my-1", "mx-1")
+//   li.textContent = `${user.name}`
+//   userListEl.appendChild(li)
+// });
 
 // removes users from chat sidebar when they disconnect
 socket.on("userLeft", user => {
   document.getElementById(user.id)?.remove()
-})
+});
 
 // event listener for chat form input and button
 chatForm.addEventListener("submit", (event) => {
@@ -60,9 +70,11 @@ clearButton.addEventListener("click", () => {
 socket.on("clearCanvases", clearArea);
 
 socket.on("startGame", ({ drawerID, randomWord }) => {
-  console.log("drawerID:", drawerID, "socket.id:", socket.id)
+  // hides start button and shows canvas
   startButton.classList.add("d-none")
   canvasContainer.classList.remove("d-none")
+  // resizes canvas for responsiveness
+  setCanvasSize()
   isDrawer = drawerID === socket.id
   if (isDrawer) {
     drawerAlertField.innerText = `You are the drawer!  Draw: ${randomWord}`
@@ -88,7 +100,7 @@ function outputMessage(message) {
   <p class="card-text chatText text-dark">${message.text}</p>
   </div>`
   messageArea.appendChild(div)
-}
+};
 
 
 
@@ -102,7 +114,36 @@ let y = 0;
 
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
-// event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.
+
+// Listens for resize event and calls setCanvasSize function
+window.addEventListener('resize', setCanvasSize, false);
+
+// helper function to remove "px" from size values below
+function pxToNum(pxValue) {
+  return parseFloat(pxValue.replace("px", ""))
+};
+
+// Function to set canvas dimensions dynamically
+function setCanvasSize() {
+  const parentStyles = window.getComputedStyle(canvas.parentElement)
+  console.log(parentStyles)
+  // Get the pixel width and height of the canvas's container
+  const containerWidth = pxToNum(parentStyles.getPropertyValue("width"))
+  const containerHeight = pxToNum(parentStyles.getPropertyValue("height"))
+  console.log(containerHeight, containerWidth)
+
+  // Set canvas dimensions to match the container size
+  canvas.width = containerWidth;
+  canvas.height = containerHeight;
+
+  // // Scale the canvas's internal coordinate system to match the new size
+  // const scaleX = canvas.width / canvas.offsetWidth;
+  // const scaleY = canvas.height / canvas.offsetHeight;
+
+  // context.canvas.width = canvas.width
+  // context.canvas.height = canvas.height
+  // context.scale(scaleX, scaleY);
+};
 
 // event listeners to track the mouseButton state if they're outside the bounds of the canvas
 let isMouseButtonDown = false;
@@ -115,6 +156,7 @@ document.addEventListener('mouseup', () => {
 });
 
 // event listener for drawing dots without moving cursor
+// event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas
 canvas.addEventListener('click', (e) => {
   if (isDrawer) {
     let color = document.getElementById('selColor').value
@@ -179,7 +221,7 @@ function drawLine(context, x1, y1, x2, y2, color, lineWidth) {
       lineWidth
     });
   }
-}
+};
 
 // function for drawing dots without moving cursor
 function drawDot(context, x, y, color, lineWidth) {

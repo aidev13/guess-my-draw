@@ -54,11 +54,11 @@ io.on("connection", async socket => {
     raw: true,
     // TODO: exclude password
   })
-
-  io.emit("activeUser", user)
-
+  const player = { ...user, socketId: socket.id }
   // push available socket IDs into empty players array
-  players.push(socket.id)
+  players.push(player)
+  // send players list to front end
+  io.emit("activePlayers", players)
   // Welcome current individual user only
   socket.emit("message", formatMessage("SYSTEM", `Welcome to the game, ${user.name}`))
   
@@ -68,7 +68,7 @@ io.on("connection", async socket => {
   // runs when user disconnects
   socket.on("disconnect", async () => {
     try {
-      players = players.filter(player => player !== socket.id)
+      players = players.filter(player => player.socketId !== socket.id)
       // emits to everyone
       io.emit("message", formatMessage("SYSTEM", `${user.name} has left the game`))
       io.emit("userLeft", user)
@@ -98,10 +98,10 @@ io.on("connection", async socket => {
     let randomIndex = Math.floor(Math.random() * players.length)
     // If there is currently only 1 player then they are assigned as drawer
     if (players.length === 1) {
-      drawerID = players[0]
+      drawerID = players[0].socketId
       // if there is more than 1 player then drawer is assigned randomly
     } else {
-      drawerID = players[randomIndex]
+      drawerID = players[randomIndex].socketId
     }
     // emit and broadcast startGame event
     io.emit("startGame", {drawerID, randomWord})

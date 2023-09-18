@@ -15,19 +15,29 @@ const socket = io.connect(`${window.location.origin}?user_id=${user_id}`);
 
 let isDrawer;
 
-// displays active users in the chat sidebar
-socket.on("activeUser", (user) => {
-  const li = document.createElement("li")
-  li.setAttribute("id", user.id)
-  li.classList.add("list-group-item", "badge", "text-bg-info", "my-1")
-  li.textContent = `${user.name}`
-  userListEl.appendChild(li)
-})
+socket.on("activePlayers", players => {
+  for (const player of players) {
+    const li = document.createElement("li")
+    li.setAttribute("id", player.id)
+    li.classList.add("list-group-item", "badge", "text-bg-info", "my-1", "mx-1")
+    li.textContent = `${player.name}`
+    userListEl.appendChild(li)
+  }
+});
+
+// // displays active users in the chat sidebar
+// socket.on("activePlayers", (user) => {
+//   const li = document.createElement("li")
+//   li.setAttribute("id", user.id)
+//   li.classList.add("list-group-item", "badge", "text-bg-info", "my-1", "mx-1")
+//   li.textContent = `${user.name}`
+//   userListEl.appendChild(li)
+// });
 
 // removes users from chat sidebar when they disconnect
 socket.on("userLeft", user => {
   document.getElementById(user.id)?.remove()
-})
+});
 
 // event listener for chat form input and button
 chatForm.addEventListener("submit", (event) => {
@@ -90,7 +100,7 @@ function outputMessage(message) {
   <p class="card-text chatText text-dark">${message.text}</p>
   </div>`
   messageArea.appendChild(div)
-}
+};
 
 
 
@@ -111,7 +121,7 @@ window.addEventListener('resize', setCanvasSize, false);
 // helper function to remove "px" from size values below
 function pxToNum(pxValue) {
   return parseFloat(pxValue.replace("px", ""))
-}
+};
 
 // Function to set canvas dimensions dynamically
 function setCanvasSize() {
@@ -133,7 +143,7 @@ function setCanvasSize() {
   // context.canvas.width = canvas.width
   // context.canvas.height = canvas.height
   // context.scale(scaleX, scaleY);
-}
+};
 
 // event listeners to track the mouseButton state if they're outside the bounds of the canvas
 let isMouseButtonDown = false;
@@ -211,7 +221,7 @@ function drawLine(context, x1, y1, x2, y2, color, lineWidth) {
       lineWidth
     });
   }
-}
+};
 
 // function for drawing dots without moving cursor
 function drawDot(context, x, y, color, lineWidth) {

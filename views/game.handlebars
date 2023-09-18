@@ -1,25 +1,6 @@
 {{!-- This allows us to send the user IDs between frontend and backend --}}
 <div id="user_id" class="d-none" data-user_id="{{user_id}}"></div>
 
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">You are the drawer!</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 {{!-- Begin page style --}}
 <div class="container-fluid">
     <div class="row">
@@ -28,7 +9,7 @@
             <div class="row">
                 <div class="col-12 d-flex justify-content-center">
 
-                    <button id="startButton" class="btn btn-lg btn-outline-info my-4">Start Game</button>
+                    <button id="startButton" class="btn btn-lg btn-outline-info fs-1 my-4">Start Game</button>
 
                     <div id="drawerAlertField" class="d-flex justify-content-center my-1 fs-2"></div>
 
@@ -70,8 +51,8 @@
                 
                 <div id="messageArea" class="col-9 py-1"></div>
                 
-                <div id="chat-sidebar" class="col-3 border text-black">
-                    <h3 class="text-center">Users</h3>
+                <div id="chat-sidebar" class="col-3 border-start text-black">
+                    <h3 class="text-center mx-1">Users</h3>
                     <ul id="userList" class="list-group list-group-flush text-center py-2">
                     </ul>
                 

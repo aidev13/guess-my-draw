@@ -3,13 +3,13 @@
   overflow-y: auto;
 }
 
+/* should be dynamically setting the height of the chat area and canvas container */
 #chatArea {
   height: calc(100vh - 68px);
 }
 
-canvas {
-  height: 600px;
-  width: 600px;
+#canvasContainer {
+  height: calc(100vh - 215px);
 }
 
 @media (min-width: 992px) {

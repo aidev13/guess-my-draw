@@ -60,8 +60,11 @@ clearButton.addEventListener("click", () => {
 socket.on("clearCanvases", clearArea);
 
 socket.on("startGame", ({ drawerID, randomWord }) => {
+  // hides start button and shows canvas
   startButton.classList.add("d-none")
   canvasContainer.classList.remove("d-none")
+  // resizes canvas for responsiveness
+  setCanvasSize()
   isDrawer = drawerID === socket.id
   if (isDrawer) {
     drawerAlertField.innerText = `You are the drawer!  Draw: ${randomWord}`
@@ -101,25 +104,36 @@ let y = 0;
 
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
-// event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.
+
+// Listens for resize event and calls setCanvasSize function
+window.addEventListener('resize', setCanvasSize, false);
+
+// helper function to remove "px" from size values below
+function pxToNum(pxValue) {
+  return parseFloat(pxValue.replace("px", ""))
+}
 
 // Function to set canvas dimensions dynamically
 function setCanvasSize() {
+  const parentStyles = window.getComputedStyle(canvas.parentElement)
+  console.log(parentStyles)
   // Get the pixel width and height of the canvas's container
-  const containerWidth = canvas.parentElement.clientWidth;
-  const containerHeight = canvas.parentElement.clientHeight;
+  const containerWidth = pxToNum(parentStyles.getPropertyValue("width"))
+  const containerHeight = pxToNum(parentStyles.getPropertyValue("height"))
+  console.log(containerHeight, containerWidth)
 
   // Set canvas dimensions to match the container size
   canvas.width = containerWidth;
   canvas.height = containerHeight;
 
-  // Scale the canvas's internal coordinate system to match the new size
-  const scaleX = canvas.width / canvas.offsetWidth;
-  const scaleY = canvas.height / canvas.offsetHeight;
+  // // Scale the canvas's internal coordinate system to match the new size
+  // const scaleX = canvas.width / canvas.offsetWidth;
+  // const scaleY = canvas.height / canvas.offsetHeight;
 
-  context.scale(scaleX, scaleY);
+  // context.canvas.width = canvas.width
+  // context.canvas.height = canvas.height
+  // context.scale(scaleX, scaleY);
 }
-// setCanvasSize()
 
 // event listeners to track the mouseButton state if they're outside the bounds of the canvas
 let isMouseButtonDown = false;
@@ -132,6 +146,7 @@ document.addEventListener('mouseup', () => {
 });
 
 // event listener for drawing dots without moving cursor
+// event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas
 canvas.addEventListener('click', (e) => {
   if (isDrawer) {
     let color = document.getElementById('selColor').value

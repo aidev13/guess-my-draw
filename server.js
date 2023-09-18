@@ -52,7 +52,7 @@ io.on("connection", async socket => {
   const user_id = socket.handshake.query.user_id
   const user = await User.findByPk(user_id, {
     raw: true,
-    // exclude password
+    // TODO: exclude password
   })
 
   io.emit("activeUser", user)

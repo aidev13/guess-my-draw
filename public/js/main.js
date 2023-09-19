@@ -16,6 +16,7 @@ const socket = io.connect(`${window.location.origin}?user_id=${user_id}`);
 let isDrawer;
 
 socket.on("activePlayers", players => {
+  userListEl.innerHTML = ""
   for (const player of players) {
     const li = document.createElement("li")
     li.setAttribute("id", player.id)
@@ -24,15 +25,6 @@ socket.on("activePlayers", players => {
     userListEl.appendChild(li)
   }
 });
-
-// // displays active users in the chat sidebar
-// socket.on("activePlayers", (user) => {
-//   const li = document.createElement("li")
-//   li.setAttribute("id", user.id)
-//   li.classList.add("list-group-item", "badge", "text-bg-info", "my-1", "mx-1")
-//   li.textContent = `${user.name}`
-//   userListEl.appendChild(li)
-// });
 
 // removes users from chat sidebar when they disconnect
 socket.on("userLeft", user => {

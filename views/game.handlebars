@@ -1,34 +1,44 @@
+{{!-- This allows us to send the user IDs between frontend and backend --}}
 <div id="user_id" class="d-none" data-user_id="{{user_id}}"></div>
+
+{{!-- Begin page style --}}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 d-flex justify-content-center">
-            <button id="startButton" class="btn btn-lg btn-outline-info my-4">Start Game</button>
-            <div id="drawerAlertField" class="d-flex justify-content-center my-3 fs-2"></div>
-        </div>
-        <div data-bs-theme="light" class="col mx-2">
 
-            <div id="canvasContainer" class="d-none">
+        <div id="canvasColumn" data-bs-theme="light" class="col-9 ps-0">
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
 
-                <canvas class="border border-3 mt-2 bg-light" id="canvas" width="630px" height="600px"></canvas>
+                    <button id="startButton" class="btn btn-lg btn-outline-info fs-1 my-4">Start Game</button>
 
-                <div class="row">
+                    <div id="drawerAlertField" class="d-flex justify-content-center my-1 fs-2"></div>
 
-                    <div class="col-1" id="colorPicker">
+                </div>
+            </div>
+
+            <div id="canvasContainer" class="d-none w-100">
+
+                <canvas class="border border-3 bg-light" id="canvas"></canvas>
+
+                <div id="drawingToolsRow" class="row">
+
+                    <div class="col-1 text-center" id="colorPicker">
                         {{!-- colorPicker --}}
-                        <input type="color" class="form-control form-control-color mt-2 drawingTools" id="selColor"
+                        <input type="color" class="form-control form-control-color mt-2 mx-auto drawingTools" id="selColor"
                             value="#3696BF" title="Choose your color">
                         <label for="selColor" class="form-label drawingTools">Color</label>
                     </div>
 
                     <div class="col-9 text-center ps-4">
                         {{!-- line width selector --}}
-                        <input type="range" class="form-range mt-2 drawingTools" id="selWidth" min="1" max="30"
+                        <input type="range" class="form-range mt-2 drawingTools" id="selWidth" min="1" max="50"
                             step="1">
                         <label for="lineWidthSelector" class="form-label drawingTools">Line Width</label>
                     </div>
-                    <div class="col-2">
+
+                    <div class="col-2 text-center">
                         {{!-- clearButton --}}
-                        <button id="clearButton" class="btn btn-outline-info mt-1 drawingTools">Clear
+                        <button id="clearButton" class="btn btn-lg btn-outline-info mt-2 drawingTools">Clear
                             Canvas</button>
                     </div>
 
@@ -36,28 +46,33 @@
             </div>
         </div>
 
-        <div id="chatArea" class="col bg-light mx-5 mt-2">
-            <div class="row" style="height: 600px; overflow: hidden;">
+        <div id="chatArea" class="col-3 bg-light d-flex flex-column">
+            <div class="row flex-grow-1" style="overflow: hidden;">
+                
                 <div id="messageArea" class="col-9 py-1"></div>
-                <div id="chat-sidebar" class="col-3 border h-100 text-black">
-                    <div id="timer"></div>
-                    <h3>Users:</h3>
-                    <ul id="userList">
-                        <li>Max</li>
-                        <li>David</li>
-                        <li>Cuma</li>
-                        <li>Mitchell</li>
+                
+                <div id="chat-sidebar" class="col-3 border-start text-black">
+                    <span id="timer"></span>
+                    <h3 class="text-center mx-1">Users</h3>
+                    
+                    <ul id="userList" class="list-group list-group-flush text-center py-2">
                     </ul>
+                
                 </div>
             </div>
+
             <form id="chatForm">
                 <div class="row border">
-                    <div class="col-9 px-1 py-1">
+                    
+                    <div class="col-9 px-1 py-1 text-center align-self-center">
                         <input id="chatInput" class="w-100" type="text" placeholder="Enter Message" autocomplete="off">
+                    
                     </div>
-                    <div class="col-3 px-1 py-1">
-                        <button id="chatSendButton" class="btn btn-outline-info w-100">Send</button>
+
+                    <div class="col-3 px-1 py-1 text-center align-self-center">
+                        <button id="chatSendButton" class="btn btn-info w-100">Send</button>
                     </div>
+
                 </div>
             </form>
         </div>

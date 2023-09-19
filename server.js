@@ -47,30 +47,35 @@ app.use(routes);
 let drawerID
 let players = []
 let randomWord
+let turnIndex = 0
+let countDown = 60;
+let intervalId;
 
 io.on("connection", async socket => {
   const user_id = socket.handshake.query.user_id
   const user = await User.findByPk(user_id, {
     raw: true,
+    // TODO: exclude password
   })
-
+  const player = { ...user, socketId: socket.id }
   // push available socket IDs into empty players array
-  players.push(socket.id)
+  players.push(player)
+  // send players list to front end
+  io.emit("activePlayers", players)
   // Welcome current individual user only
   socket.emit("message", formatMessage("SYSTEM", `Welcome to the game, ${user.name}`))
-  
+
   // broadcast on new connection to everyone except user that's connecting
   socket.broadcast.emit("message", formatMessage("SYSTEM", `${user.name} has joined the game`))
-  
+
   // runs when user disconnects
-  socket.on("disconnect", async () => {
-    try {
-      players = players.filter(player => player !== socket.id)
-      // emits to everyone
-      io.emit("message", formatMessage("SYSTEM", `${user.name} has left the game`))
-    } catch(err) {
-      console.error(err)
-    }
+  socket.on("disconnect", () => {
+
+    players = players.filter(player => player.socketId !== socket.id)
+    // emits to everyone
+    io.emit("message", formatMessage("SYSTEM", `${user.name} has left the game`))
+    io.emit("userLeft", user)
+
   })
 
   function checkGuess(msg) {
@@ -81,28 +86,47 @@ io.on("connection", async socket => {
   socket.on("chat message", async (msg) => {
     // emit back to everyone on front end
     io.emit("message", formatMessage(user.name, msg))
-    const correctGuess =  checkGuess(msg)
+    const correctGuess = checkGuess(msg)
     if (correctGuess) {
-      await User.increment({ wins:1 }, { where: {id: user_id } })
+      await User.increment({ wins: 1 }, { where: { id: user_id } })
       io.emit("message", formatMessage("SYSTEM", `${user.name} guessed correctly!  The word was "${randomWord}"`))
+      turnIndex++
+      startRound()
     }
   })
 
-  socket.on("requestStartGame", () => {
+  const startRound = () => {
     randomWord = getRandomWords()
-    // get a random index
-    let randomIndex = Math.floor(Math.random() * players.length)
-    // If there is currently only 1 player then they are assigned as drawer
-    if (players.length === 1) {
-      drawerID = players[0]
-      // if there is more than 1 player then drawer is assigned randomly
-    } else {
-      drawerID = players[randomIndex]
-    }
+    //timer
+    countDown = 60;
+    clearInterval(intervalId)
+    intervalId = setInterval(() => {
+      countDown--;
+      if(countDown===0) {
+        io.emit("message", formatMessage("SYSTEM", `noone got it,  The word was "${randomWord}"`))
+        turnIndex++
+        startRound()
+      }
+      else {
+
+        io.emit( 'timer', countDown  )
+      }
+    }, 1000)
+
+
+    //choosing drawer
+
+
+    turnIndex = turnIndex % players.length
+    drawerID = players[turnIndex].socketId
+
+
     // emit and broadcast startGame event
-    io.emit("startGame", {drawerID, randomWord})
+    io.emit("startGame", { drawerID, randomWord })
     randomWord = randomWord.toLowerCase().trim() // normalize random word
-  })
+  }
+
+  socket.on("requestStartGame", startRound)
 
   socket.on('drawing', (data) => socket.broadcast.emit('drawing', data));
 

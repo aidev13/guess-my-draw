@@ -47,6 +47,7 @@ app.use(routes);
 let drawerID
 let players = []
 let randomWord
+let turnIndex = 0
 
 io.on("connection", async socket => {
   const user_id = socket.handshake.query.user_id
@@ -66,15 +67,13 @@ io.on("connection", async socket => {
   socket.broadcast.emit("message", formatMessage("SYSTEM", `${user.name} has joined the game`))
   
   // runs when user disconnects
-  socket.on("disconnect", async () => {
-    try {
+  socket.on("disconnect",  () => {
+    
       players = players.filter(player => player.socketId !== socket.id)
       // emits to everyone
       io.emit("message", formatMessage("SYSTEM", `${user.name} has left the game`))
       io.emit("userLeft", user)
-    } catch(err) {
-      console.error(err)
-    }
+    
   })
 
   function checkGuess(msg) {
@@ -89,24 +88,24 @@ io.on("connection", async socket => {
     if (correctGuess) {
       await User.increment({ wins:1 }, { where: {id: user_id } })
       io.emit("message", formatMessage("SYSTEM", `${user.name} guessed correctly!  The word was "${randomWord}"`))
+      turnIndex++
+      startRound()
     }
   })
-
-  socket.on("requestStartGame", () => {
+  
+  const startRound = () => {
     randomWord = getRandomWords()
-    // get a random index
-    let randomIndex = Math.floor(Math.random() * players.length)
-    // If there is currently only 1 player then they are assigned as drawer
-    if (players.length === 1) {
-      drawerID = players[0].socketId
-      // if there is more than 1 player then drawer is assigned randomly
-    } else {
-      drawerID = players[randomIndex].socketId
-    }
+
+    turnIndex = turnIndex % players.length
+    drawerID = players[turnIndex].socketId
+     
+     
     // emit and broadcast startGame event
     io.emit("startGame", {drawerID, randomWord})
     randomWord = randomWord.toLowerCase().trim() // normalize random word
-  })
+  }
+  
+  socket.on("requestStartGame", startRound )
 
   socket.on('drawing', (data) => socket.broadcast.emit('drawing', data));
 

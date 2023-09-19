@@ -70,12 +70,11 @@ io.on("connection", async socket => {
 
   // runs when user disconnects
   socket.on("disconnect", () => {
-
     players = players.filter(player => player.socketId !== socket.id)
     // emits to everyone
     io.emit("message", formatMessage("SYSTEM", `${user.name} has left the game`))
     io.emit("userLeft", user)
-    if( players.length===0) {
+    if(players.length === 0) {
       clearInterval(intervalId)
     }
   })
@@ -91,7 +90,7 @@ io.on("connection", async socket => {
     const correctGuess = checkGuess(msg)
     if (correctGuess) {
       await User.increment({ wins: 1 }, { where: { id: user_id } })
-      io.emit("message", formatMessage("SYSTEM", `${user.name} guessed correctly!  The word was "${randomWord}"`))
+      io.emit("message", formatMessage("SYSTEM", `${user.name} guessed correctly!  The word was "${randomWord}"`, "bg-success"))
       turnIndex++
       startRound()
     }
@@ -104,24 +103,18 @@ io.on("connection", async socket => {
     clearInterval(intervalId)
     intervalId = setInterval(() => {
       countDown--;
-      if(countDown===0) {
-        io.emit("message", formatMessage("SYSTEM", `noone got it,  The word was "${randomWord}"`))
+      if(countDown === 0) {
+        io.emit("message", formatMessage("SYSTEM", `Nobody guessed it! The word was "${randomWord}"`, "bg-danger"))
         turnIndex++
         startRound()
-      }
-      else {
-
-        io.emit( 'timer', countDown  )
+      } else {
+        io.emit('timer', countDown)
       }
     }, 1000)
 
-
     //choosing drawer
-
-
     turnIndex = turnIndex % players.length
     drawerID = players[turnIndex].socketId
-
 
     // emit and broadcast startGame event
     io.emit("startGame", { drawerID, randomWord })

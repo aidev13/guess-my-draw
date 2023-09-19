@@ -51,16 +51,20 @@ socket.on("message", message => {
   messageArea.scrollTop = messageArea.scrollHeight
 });
 
+// event listener for start button
 startButton.addEventListener("click", (event) => {
   socket.emit("requestStartGame")
 });
 
+// event listener for clear canvas button
 clearButton.addEventListener("click", () => {
   socket.emit("requestClearCanvases")
 });
 
+// socket listener for clearing canvas event
 socket.on("clearCanvases", clearArea);
 
+// socket listener for startGame event
 socket.on("startGame", ({ drawerID, randomWord }) => {
   // hides start button and shows canvas
   startButton.classList.add("d-none")
@@ -83,7 +87,7 @@ socket.on("startGame", ({ drawerID, randomWord }) => {
 // Output messages to DOM
 function outputMessage(message) {
   const div = document.createElement("div")
-  div.classList.add("chatMessage", "card", "bg-info", "bg-gradient", "bg-opacity-50", "my-2")
+  div.classList.add("chatMessage", "card", message.colorClass, "bg-gradient", "bg-opacity-50", "my-2")
   div.innerHTML = `
   <div class="card-header text-dark bg-gradient">
   ${message.username}, ${message.time}

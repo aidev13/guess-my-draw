@@ -15,6 +15,7 @@ const socket = io.connect(`${window.location.origin}?user_id=${user_id}`);
 
 let isDrawer;
 
+// displays connected users in chat sidebar when logged in
 socket.on("activePlayers", players => {
   userListEl.innerHTML = ""
   for (const player of players) {
@@ -71,6 +72,7 @@ socket.on("startGame", ({ drawerID, randomWord }) => {
   canvasContainer.classList.remove("d-none")
   // resizes canvas for responsiveness
   setCanvasSize()
+  
   isDrawer = drawerID === socket.id
   if (isDrawer) {
     drawerAlertField.innerText = `You are the drawer!  Draw: ${randomWord}`
@@ -122,23 +124,13 @@ function pxToNum(pxValue) {
 // Function to set canvas dimensions dynamically
 function setCanvasSize() {
   const parentStyles = window.getComputedStyle(canvas.parentElement)
-  console.log(parentStyles)
   // Get the pixel width and height of the canvas's container
   const containerWidth = pxToNum(parentStyles.getPropertyValue("width"))
   const containerHeight = pxToNum(parentStyles.getPropertyValue("height"))
-  console.log(containerHeight, containerWidth)
 
   // Set canvas dimensions to match the container size
   canvas.width = containerWidth;
   canvas.height = containerHeight;
-
-  // // Scale the canvas's internal coordinate system to match the new size
-  // const scaleX = canvas.width / canvas.offsetWidth;
-  // const scaleY = canvas.height / canvas.offsetHeight;
-
-  // context.canvas.width = canvas.width
-  // context.canvas.height = canvas.height
-  // context.scale(scaleX, scaleY);
 };
 
 // event listeners to track the mouseButton state if they're outside the bounds of the canvas
@@ -258,7 +250,6 @@ socket.on("drawing", (drawingData) => {
 });
 
 socket.on( 'timer', (countDown) => {
-  console.log(countDown)
   countDown
   timer.textContent = 'Time Left:' + countDown;
 })

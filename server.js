@@ -75,7 +75,9 @@ io.on("connection", async socket => {
     // emits to everyone
     io.emit("message", formatMessage("SYSTEM", `${user.name} has left the game`))
     io.emit("userLeft", user)
-
+    if( players.length===0) {
+      clearInterval(intervalId)
+    }
   })
 
   function checkGuess(msg) {

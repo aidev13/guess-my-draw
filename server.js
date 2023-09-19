@@ -89,20 +89,23 @@ io.on("connection", async socket => {
       await User.increment({ wins:1 }, { where: {id: user_id } })
       io.emit("message", formatMessage("SYSTEM", `${user.name} guessed correctly!  The word was "${randomWord}"`))
       turnIndex++
+      startRound()
     }
   })
-
-  socket.on("requestStartGame", () => {
+  
+  const startRound = () => {
     randomWord = getRandomWords()
 
     turnIndex = turnIndex % players.length
-    drawerID = players[turnIndex]
+    drawerID = players[turnIndex].socketId
      
      
     // emit and broadcast startGame event
     io.emit("startGame", {drawerID, randomWord})
     randomWord = randomWord.toLowerCase().trim() // normalize random word
-  })
+  }
+  
+  socket.on("requestStartGame", startRound )
 
   socket.on('drawing', (data) => socket.broadcast.emit('drawing', data));
 

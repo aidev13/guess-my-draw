@@ -165,3 +165,8 @@ socket.on("drawing", (drawingData) => {
     drawingData.color,
     drawingData.lineWidth)
 })
+
+// timerDisplay.textContent = 'Time: ' + seconds;
+
+
+

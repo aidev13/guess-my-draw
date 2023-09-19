@@ -12,7 +12,7 @@
                 <canvas class="border border-3 mt-2 bg-light" id="canvas" width="630px" height="600px"></canvas>
 
                 <div class="row">
-                    
+
                     <div class="col-1" id="colorPicker">
                         {{!-- colorPicker --}}
                         <input type="color" class="form-control form-control-color mt-2 drawingTools" id="selColor"
@@ -40,6 +40,7 @@
             <div class="row" style="height: 600px; overflow: hidden;">
                 <div id="messageArea" class="col-9 py-1"></div>
                 <div id="chat-sidebar" class="col-3 border h-100 text-black">
+                    <div id="timer"></div>
                     <h3>Users:</h3>
                     <ul id="userList">
                         <li>Max</li>
@@ -62,6 +63,8 @@
         </div>
     </div>
 </div>
-
+<style>
+    
+</style>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/main.js"></script>

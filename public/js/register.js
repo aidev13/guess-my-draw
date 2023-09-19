@@ -2,6 +2,7 @@ const nameInput = document.getElementById('name-input')
 const emailInput = document.getElementById('email-login')
 const passwordInput = document.getElementById('password-login')
 const form = document.querySelector('form')
+const userList = document.getElementById('userList')
 
 console.log(nameInput, emailInput, passwordInput)
 form.addEventListener('submit', async (e) => {
@@ -28,3 +29,9 @@ try{
     console.log(err)
 }
 });
+
+// function addUserToList(name) {
+//     const li = document.createElement('li')
+//     li.textContent = name; 
+//     userList.appendChild(li)
+// }

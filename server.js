@@ -74,11 +74,13 @@ io.on("connection", async socket => {
     // emits to everyone
     io.emit("message", formatMessage("SYSTEM", `${user.name} has left the game`))
     io.emit("userLeft", user)
+    // if no connected players, stop interval
     if(players.length === 0) {
       clearInterval(intervalId)
     }
   })
 
+  // function for checking messages against drawer's assigned word
   function checkGuess(msg) {
     return msg.toLowerCase().trim() === randomWord
   }
@@ -87,10 +89,14 @@ io.on("connection", async socket => {
   socket.on("chat message", async (msg) => {
     // emit back to everyone on front end
     io.emit("message", formatMessage(user.name, msg))
+    // checking messages against drawer's assigned word
     const correctGuess = checkGuess(msg)
     if (correctGuess) {
+      // increment wins of user who guessed correctly
       await User.increment({ wins: 1 }, { where: { id: user_id } })
+      // system message confirming someone won
       io.emit("message", formatMessage("SYSTEM", `${user.name} guessed correctly!  The word was "${randomWord}"`, "bg-success"))
+      // change turn and switch who is drawing
       turnIndex++
       startRound()
     }
@@ -103,8 +109,11 @@ io.on("connection", async socket => {
     clearInterval(intervalId)
     intervalId = setInterval(() => {
       countDown--;
+      // when timer ends, round is lost
       if(countDown === 0) {
+        // system message confirming round lost
         io.emit("message", formatMessage("SYSTEM", `Nobody guessed it! The word was "${randomWord}"`, "bg-danger"))
+        // change turn and switch who is drawing
         turnIndex++
         startRound()
       } else {
@@ -121,11 +130,15 @@ io.on("connection", async socket => {
     randomWord = randomWord.toLowerCase().trim() // normalize random word
   }
 
+  // socket listener waiting for start button press on front end
   socket.on("requestStartGame", startRound)
 
+  // socket listener for drawing data
   socket.on('drawing', (data) => socket.broadcast.emit('drawing', data));
 
+  // socket listener for clear canvas button
   socket.on("requestClearCanvases", () => {
+    // sending clear canvas function to everyone's canvases
     io.emit("clearCanvases")
   })
 });

@@ -124,14 +124,15 @@ io.on("connection", async socket => {
     //choosing drawer
     turnIndex = turnIndex % players.length
     drawerID = players[turnIndex].socketId
-
+    
     // emit and broadcast startGame event
     io.emit("startGame", { drawerID, randomWord })
-    randomWord = randomWord.toLowerCase().trim() // normalize random word
-  }
+    // normalize random word
+    randomWord = randomWord.toLowerCase().trim()
+  };
 
   // socket listener waiting for start button press on front end
-  socket.on("requestStartGame", startRound)
+  socket.on("requestStartGame", startRound);
 
   // socket listener for drawing data
   socket.on('drawing', (data) => socket.broadcast.emit('drawing', data));

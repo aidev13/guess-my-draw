@@ -76,6 +76,11 @@ socket.on("startGame", ({ drawerID, randomWord }) => {
   isDrawer = drawerID === socket.id
   if (isDrawer) {
     drawerAlertField.innerText = `You are the drawer!  Draw: ${randomWord}`
+    // loop through drawingTools
+      for (const drawingTool of drawingTools) {
+        // remove hidden class from each
+          drawingTool.classList.remove("d-none")
+  }
   } else if(!isDrawer) {
     drawerAlertField.innerText = "You are guessing!"
     // loop through drawingTools

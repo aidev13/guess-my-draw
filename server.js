@@ -63,7 +63,7 @@ io.on("connection", async socket => {
   // send players list to front end
   io.emit("activePlayers", players)
   // Welcome current individual user only
-  socket.emit("message", formatMessage("SYSTEM", `Welcome to the game, ${user.name}`))
+  socket.emit("message", formatMessage("SYSTEM", `Welcome to the game, ${user.name}`));
 
   // broadcast on new connection to everyone except user that's connecting
   socket.broadcast.emit("message", formatMessage("SYSTEM", `${user.name} has joined the game`))
@@ -78,12 +78,12 @@ io.on("connection", async socket => {
     if(players.length === 0) {
       clearInterval(intervalId)
     }
-  })
+  });
 
   // function for checking messages against drawer's assigned word
   function checkGuess(msg) {
     return msg.toLowerCase().trim() === randomWord
-  }
+  };
 
   // listen for chat message
   socket.on("chat message", async (msg) => {
@@ -100,7 +100,7 @@ io.on("connection", async socket => {
       turnIndex++
       startRound()
     }
-  })
+  });
 
   const startRound = () => {
     randomWord = getRandomWords()

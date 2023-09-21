@@ -12,6 +12,12 @@
   height: calc(100vh - 215px);
 }
 
+body.prevent-select * {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
 @media (min-width: 992px) {
   .navbar-expand-lg .navbar-collapse {
       display: flex!important;

@@ -6,6 +6,7 @@ const chatSendButton = document.getElementById("chatSendButton")
 const startButton = document.getElementById("startButton");
 const canvasContainer = document.getElementById("canvasContainer");
 const drawingTools = document.getElementsByClassName("drawingTools");
+const lineRange = document.getElementById("selWidth");
 const clearButton = document.getElementById("clearButton");
 const messageArea = document.getElementById("messageArea");
 const userListEl = document.getElementById("userList")
@@ -138,14 +139,29 @@ function setCanvasSize() {
   canvas.height = containerHeight;
 };
 
+// event listener for mouse wheel operating line width range slider
+window.addEventListener('wheel', function(event) {
+    if (event.deltaY < 0) {
+      console.log('scrolling up');
+      lineRange.value = parseInt(lineRange.value) + 2
+    } else if (event.deltaY > 0) {
+      console.log('scrolling down');
+      lineRange.value = parseInt(lineRange.value) - 2
+    }
+});
+
 // event listeners to track the mouseButton state if they're outside the bounds of the canvas
 let isMouseButtonDown = false;
-document.addEventListener('mousedown', () => {
+document.addEventListener('mousedown', (event) => {
+  if (event.target.matches("canvas")) {
+    document.body.classList.add("prevent-select")
+  }
   isMouseButtonDown = true
 });
 
 document.addEventListener('mouseup', () => {
   isMouseButtonDown = false
+  document.body.classList.remove("prevent-select")
 });
 
 // event listener for drawing dots without moving cursor

@@ -1,3 +1,16 @@
+body {
+  background-color: #00000039;
+  background-image: url(/images/draw.jpg);
+  background-position: center center;
+  background-attachment: fixed;
+}
+
+.highscore-tile {
+  background-color: darkgray;
+  opacity: .5;
+  padding: 15px;
+}
+
 #messageArea {
   height: 100%;
   overflow-y: auto;
@@ -23,5 +36,24 @@ body.prevent-select * {
       display: flex!important;
       flex-basis: auto;
       justify-content: flex-end;
+      
   }
+}
+
+@media (max-width: 720px) {
+  body {
+    background-image: url(/images/sorry.jpg);
+    background-position: center center;
+    background-attachment: fixed;
+
+  }
+
+  form {
+    display: none;
+  }
+
+  .container-fluid {
+    display: none;
+  }
+  
 }

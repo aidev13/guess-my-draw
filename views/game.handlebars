@@ -79,7 +79,19 @@
     </div>
 </div>
 <style>
-    
+    body{
+        background-image: none;
+    }
+
+    @media (max-width: 720px) {
+  body {
+    background-image: url(/images/sorry.jpg);
+    background-position: center center;
+    background-attachment: fixed;
+
+  }
+  
+}
 </style>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/main.js"></script>

@@ -1,3 +1,4 @@
+
 <div class="container-fluid">
   <h1 class="fs-2 text-center my-2">Wins</h1>
 {{#each users as |user| }}
@@ -13,3 +14,28 @@
 </div>
 {{/each}}
 </div>
+
+<style media="screen">
+  body {
+    background-image: none;
+    background-color: rgb(0, 66, 128);
+  }
+
+  @media (max-width: 720px) {
+  body {
+    background-image: url(/images/sorry.jpg);
+    background-position: center center;
+    background-attachment: fixed;
+
+  }
+
+  form {
+    display: none;
+  }
+
+  .container-fluid {
+    display: none;
+  }
+  
+}
+</style>

@@ -1,33 +1,23 @@
-# Guess My Draw
+# Guess My Drawing
 
-## Like Pictionary? It’s like that, only you don’t need to wear pants.
+### *Like Pictionary? It’s like that, only you don’t need to wear pants.*
 
-### **Concept**-   This is a simple game where one player tries to draw a picture, and the rest of the players try to guess what they’re drawing.
+---
+
+> [Deployed Application](https://guess-my-draw-47ce90c0ad48.herokuapp.com/login)
     
--   Games like this are fun to play with a group.
--   User story:
-As a person playing the game, I want to be able to draw a picture and have my friends guess what I’m drawing. If someone guesses correctly, I want the game to pick a new person to draw and start over.
+> [Repository](https://github.com/aidev13/guess-my-draw)
 
-## **Process**
--   Technologies used: Node.js, sequelize, express-session, bcrypt, socket.io
-    
--   Challenges: socket.io is a technology we didn’t learn in the bootcamp.
-    
--   Successes: Figuring out how socket.io worked wasn’t as hard as expected.
+---
 
-# **Directions for Future Development**
--   Mobile version - Making a canvas element that you can draw on be responsive turns out to be very complicated.
-    
--   Add ability to tell if a game is already running before you arrive
-    
--   Add rooms
-    
--   Modularize code
+This is a simple game where one player tries to draw a picture, and the rest of the players try to guess what they’re drawing.  The drawing updates live for all players in real-time.  The first person to guess correctly wins the round!
 
-## Technologies Used
+---
 
-    "dependencies":  
+![Guess My Drawing](./public/images/GuessMyDraw.png)
 
+
+## Technologies Used  
     "bcrypt":  "^5.0.0",
     "connect-session-sequelize":  "^7.0.4",
     "dayjs":  "^1.11.9",
@@ -40,15 +30,4 @@ As a person playing the game, I want to be able to draw a picture and have my fr
     "socket.io":  "^4.7.2",
     "word-pictionary-list":  "^1.0.4"
 
-### **Links**
-
->-   https://gentle-anchorage-49919-635e14d21a67.herokuapp.com/
-    
->-   https://github.com/aidev13/guess-my-draw
-
-#### Devs
-- Max R
-- David L
-- Cuma U
-- Mitchell K
 
